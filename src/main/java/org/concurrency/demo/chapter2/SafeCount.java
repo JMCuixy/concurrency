@@ -1,4 +1,4 @@
-package org.concurrency.demo.Chapter2;
+package org.concurrency.demo.chapter2;
 
 import java.util.ArrayList;
 import java.util.List;
