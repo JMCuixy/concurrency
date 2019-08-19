@@ -14,7 +14,9 @@ public class ThreadState {
 
     }
 
-    // 该线程不断地进行睡眠
+    /**
+     * 该线程不断地进行睡眠
+     */
     static class TimeWaiting implements Runnable {
         @Override
         public void run() {
@@ -24,7 +26,9 @@ public class ThreadState {
         }
     }
 
-    // 该线程在Waiting. class实例上等待
+    /**
+     * 该线程在Waiting. class实例上等待
+     */
     static class Waiting implements Runnable {
         @Override
         public void run() {
@@ -40,8 +44,11 @@ public class ThreadState {
         }
     }
 
-    // 该线程在Blocked. class实例上加锁后，不会释放该锁
+    /**
+     * 该线程在Blocked. class实例上加锁后，不会释放该锁
+     */
     static class Blocked implements Runnable {
+        @Override
         public void run() {
             synchronized (Blocked.class) {
                 while (true) {

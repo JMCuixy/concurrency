@@ -28,13 +28,14 @@ public class Priority {
     }
 
     static class Job implements Runnable {
-        private int priority;
-        private long jobCount;
+        private Integer priority;
+        private Long jobCount = 0L ;
 
         public Job(int priority) {
             this.priority = priority;
         }
 
+        @Override
         public void run() {
             while (notStart) {
                 Thread.yield();

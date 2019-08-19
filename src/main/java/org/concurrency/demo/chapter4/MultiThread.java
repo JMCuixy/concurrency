@@ -13,8 +13,13 @@ public class MultiThread {
 
     /**
      * @Description Java 程序天生就是多线程程序
-     * @author xiuyin.cui
-     * @date 2019/03/05 21:24
+     * <p>
+     * [6] Monitor Ctrl-Break
+     * [5] Attach Listener
+     * [4] Signal Dispatcher
+     * [3] Finalizer
+     * [2] Reference Handler
+     * [1] main
      */
     public static void main(String[] args) {
         // 获取Java线程管理的MXBean

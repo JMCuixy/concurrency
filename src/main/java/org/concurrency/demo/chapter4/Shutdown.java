@@ -4,8 +4,8 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @author xiuyin.cui
- * @Description main线程通过中断操作和cancel()方法均可使CountThread得以终止。这种通过标识位或者中断操作的方式能够使线程在终止时
- * 有机会去清理资源，而不是武断地将线程停止，因此这种终止线程的做法显得更加安全和优雅。
+ * @Description main线程通过中断操作和 cancel()方法均可使CountThread得以终止。
+ * 这种通过标识位或者中断操作的方式能够使线程在终止时有机会去清理资源，而不是武断地将线程停止，因此这种终止线程的做法显得更加安全和优雅。
  * @date 2019/3/8 18:43
  */
 public class Shutdown {
