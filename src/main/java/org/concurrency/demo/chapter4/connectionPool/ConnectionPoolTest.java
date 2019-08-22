@@ -24,7 +24,7 @@ public class ConnectionPoolTest {
         // 线程数量，可以修改线程数量进行观察
         int threadCount = 10;
         END = new CountDownLatch(threadCount);
-        int count = 60;
+        int count = 70;
         AtomicInteger got = new AtomicInteger();
         AtomicInteger notGot = new AtomicInteger();
         for (int i = 0; i < threadCount; i++) {

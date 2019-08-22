@@ -30,12 +30,18 @@ public class DefaultThreadPool<Job extends Runnable> implements ThreadPool<Job> 
     /**
      * 这是一个工作列表，将会向里面插入工作
      */
-    private final LinkedList<Job> jobs = new LinkedList<Job>();
-    // 工作者列表
+    private final LinkedList<Job> jobs = new LinkedList<>();
+    /**
+     * 工作者列表
+     */
     private final List<Worker> workers = Collections.synchronizedList(new ArrayList<Worker>());
-    // 工作者线程的数量
+    /**
+     * 工作者线程的数量
+     */
     private int workerNum = DEFAULT_WORKER_NUMBERS;
-    // 线程编号生成
+    /**
+     * 线程编号生成
+     */
     private AtomicLong threadNum = new AtomicLong();
 
     public DefaultThreadPool() {
@@ -86,7 +92,8 @@ public class DefaultThreadPool<Job extends Runnable> implements ThreadPool<Job> 
             //按照给定的数量停止Worker
             int count = 0;
             while (count < num) {
-                Worker worker = workers.get(count)
+                // 每次都移除第一个线程
+                Worker worker = workers.get(0);
                 if (workers.remove(worker)) {
                     worker.shutdown();
                     count++;
@@ -101,21 +108,28 @@ public class DefaultThreadPool<Job extends Runnable> implements ThreadPool<Job> 
         return jobs.size();
     }
 
-    //初始化线程工作者
+    /**
+     * 初始化线程工作者
+     *
+     * @param num
+     */
     private void initializeWokers(int num) {
         for (int i = 0; i < num; i++) {
             Worker worker = new Worker();
             workers.add(worker);
-            Thread thread = new Thread(worker, "ThreadPool-Worker-" + threadNum.
-                    incrementAndGet());
+            Thread thread = new Thread(worker, "ThreadPool-Worker-" + threadNum.incrementAndGet());
             thread.start();
         }
     }
 
-    //工作者，负责消费任务
+    /**
+     * 工作者，负责消费任务
+     */
     class Worker implements Runnable {
 
-        // 是否工作
+        /**
+         * 是否工作
+         */
         private volatile boolean running = true;
 
         @Override
@@ -128,7 +142,7 @@ public class DefaultThreadPool<Job extends Runnable> implements ThreadPool<Job> 
                         try {
                             jobs.wait();
                         } catch (InterruptedException ex) {
-                            // 感知到外部对WorkerThread的中断操作，返回
+                            // 感知到外部对 WorkerThread 的中断操作，返回
                             Thread.currentThread().interrupt();
                             return;
                         }
