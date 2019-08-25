@@ -11,28 +11,18 @@ import java.util.concurrent.atomic.AtomicLong;
  * @date : 2019/8/21
  */
 public class DefaultThreadPool<Job extends Runnable> implements ThreadPool<Job> {
-
     /**
-     * 线程池最大限制数
+     * 线程池最大限制数、默认的数量、最小的数量
      */
-    private static final int MAX_WORKER_NUMBERS = 10;
-
+    private static final Integer MAX_WORKER_NUMBERS = 10;
+    private static final Integer DEFAULT_WORKER_NUMBERS = 5;
+    private static final Integer MIN_WORKER_NUMBERS = 1;
     /**
-     * 线程池默认的数量
-     */
-    private static final int DEFAULT_WORKER_NUMBERS = 5;
-
-    /**
-     * 线程池最小的数量
-     */
-    private static final int MIN_WORKER_NUMBERS = 1;
-
-    /**
-     * 这是一个工作列表，将会向里面插入工作
+     * 这是一个待工作列表，将会向里面插入工作
      */
     private final LinkedList<Job> jobs = new LinkedList<>();
     /**
-     * 工作者列表
+     * 工作者列表（固定数目的线程，不断去执行  jobs 中的任务）
      */
     private final List<Worker> workers = Collections.synchronizedList(new ArrayList<Worker>());
     /**
@@ -126,7 +116,6 @@ public class DefaultThreadPool<Job extends Runnable> implements ThreadPool<Job> 
      * 工作者，负责消费任务
      */
     class Worker implements Runnable {
-
         /**
          * 是否工作
          */
@@ -135,7 +124,7 @@ public class DefaultThreadPool<Job extends Runnable> implements ThreadPool<Job> 
         @Override
         public void run() {
             while (running) {
-                Job job = null;
+                Job job;
                 synchronized (jobs) {
                     // 如果工作者列表是空的，那么就wait
                     while (jobs.isEmpty()) {

@@ -15,10 +15,10 @@ public class SimpleHttpServer {
      */
     static ThreadPool<HttpRequestHandler> THREAD_POOL = new DefaultThreadPool<>(1);
     /**
-     * SimpleHttpServer的根路径
+     * SimpleHttpServer的根路径（可以理解成 Tomcat 的 Root 目录）
      */
-    static String BASE_PATH;
-    static ServerSocket SERVER_SOCKET;
+    static String basePath;
+    static ServerSocket serverSocket;
     /**
      * 服务监听端口
      */
@@ -32,7 +32,7 @@ public class SimpleHttpServer {
 
     public static void setBasePath(String basePath) {
         if (basePath != null && new File(basePath).exists() && new File(basePath).isDirectory()) {
-            SimpleHttpServer.BASE_PATH = basePath;
+            SimpleHttpServer.basePath = basePath;
         }
     }
 
@@ -42,17 +42,18 @@ public class SimpleHttpServer {
      * @throws Exception
      */
     public static void start() throws Exception {
-        SERVER_SOCKET = new ServerSocket(port);
+        serverSocket = new ServerSocket(port);
         Socket socket;
-        while ((socket = SERVER_SOCKET.accept()) != null) {
-            System.out.println("接收到用户端请求");
+        while ((socket = serverSocket.accept()) != null) {
             // 接收一个客户端Socket，生成一个HttpRequestHandler，放入线程池执行
             THREAD_POOL.execute(new HttpRequestHandler(socket));
         }
-        SERVER_SOCKET.close();
+        serverSocket.close();
     }
 
+
     static class HttpRequestHandler implements Runnable {
+
         private Socket socket;
 
         public HttpRequestHandler(Socket socket) {
@@ -61,18 +62,17 @@ public class SimpleHttpServer {
 
         @Override
         public void run() {
-            String line = null;
-            BufferedReader br = null;
             // socket 输入
             BufferedReader reader = null;
             // socket 输出
             PrintWriter out = null;
+            BufferedReader br = null;
             InputStream in = null;
             try {
                 reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 String header = reader.readLine();
                 // 由相对路径计算出绝对路径
-                String filePath = BASE_PATH + header.split("\\s+")[1];
+                String filePath = basePath + header.split("\\s+")[1];
                 out = new PrintWriter(socket.getOutputStream());
                 // 如果请求资源的后缀为jpg或者ico，则读取资源并输出
                 if (filePath.endsWith("jpg") || filePath.endsWith("ico")) {
@@ -96,6 +96,7 @@ public class SimpleHttpServer {
                     out.println("Server: Molly");
                     out.println("Content-Type: text/html; charset=UTF-8");
                     out.println("");
+                    String line = null;
                     while ((line = br.readLine()) != null) {
                         out.println(line);
                     }
