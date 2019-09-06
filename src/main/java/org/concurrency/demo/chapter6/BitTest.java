@@ -13,8 +13,11 @@ public class BitTest {
 
     public static void main(String[] args) {
         System.out.println(3 << 2);
-        System.out.println(16 >>> 2);
         System.out.println(-3 << 2);
+        System.out.println(16 >> 2);
+        System.out.println(-16 >> 2);
+
+        System.out.println(16 >>> 2);
         // 负数的二进制是正数二进制取反再 +1
         int i = -16 >>> 2;
         System.out.println(i);

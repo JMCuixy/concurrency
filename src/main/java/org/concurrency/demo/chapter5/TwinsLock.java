@@ -32,8 +32,7 @@ public class TwinsLock implements Lock {
             for (; ; ) {
                 int current = getState();
                 int newCount = current - reduceCount;
-                if (newCount < 0 || compareAndSetState(current,
-                        newCount)) {
+                if (newCount < 0 || compareAndSetState(current, newCount)) {
                     return newCount;
                 }
             }
