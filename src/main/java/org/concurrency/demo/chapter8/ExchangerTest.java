@@ -21,17 +21,16 @@ public class ExchangerTest {
     public static void main(String[] args) {
         threadPool.execute(() -> {
             try {
-                exchange.exchange("校验结果A");
+                String result = exchange.exchange("数据A");
+                System.out.println("A的exchange结果：" + result);
             } catch (InterruptedException e) {
             }
 
         });
         threadPool.execute(() -> {
             try {
-                String resultB = "校验结果B";
-                String resultA = exchange.exchange("");
-                System.out.println("A 和 B 校验结果是否一致：" + resultA.equals(resultB) + "，A 录入的是：" + resultA + "，" +
-                        "B 录入是：" + resultB);
+                String result = exchange.exchange("数据B");
+                System.out.println("B的exchange结果：" + result);
             } catch (InterruptedException e) {
             }
         });
