@@ -12,8 +12,9 @@ import java.util.concurrent.*;
 public class Pool {
 
     static ThreadFactory threadFactory = new ThreadFactoryBuilder().setNameFormat("pool-task-%d").build();
-    static ExecutorService executor = new ThreadPoolExecutor(5, 200, 0L, TimeUnit.MILLISECONDS,
-            new LinkedBlockingQueue<>(1024), threadFactory, new ThreadPoolExecutor.AbortPolicy());
+    static ExecutorService executor = new ThreadPoolExecutor(Runtime.getRuntime().availableProcessors() * 2,
+            200, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>(1024),
+            threadFactory, new ThreadPoolExecutor.AbortPolicy());
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         // 1. 无返回值的任务执行 -> Runnable
@@ -24,8 +25,22 @@ public class Pool {
         String result = future.get();
         System.out.println(result);
 
-        // 3. 关闭线程池
+        // 3. 监控线程池
+        monitor();
+
+        // 4. 关闭线程池
         shutdownAndAwaitTermination();
+
+        monitor();
+    }
+
+    private static void monitor() {
+        ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) Pool.executor;
+        System.out.println("【线程池任务】线程池中曾经创建过的最大线程数：" + threadPoolExecutor.getLargestPoolSize());
+        System.out.println("【线程池任务】线程池中线程数：" + threadPoolExecutor.getPoolSize());
+        System.out.println("【线程池任务】线程池中活动的线程数：" + threadPoolExecutor.getActiveCount());
+        System.out.println("【线程池任务】队列中等待执行的任务数：" + threadPoolExecutor.getQueue().size());
+        System.out.println("【线程池任务】线程池已执行完任务数：" + threadPoolExecutor.getCompletedTaskCount());
     }
 
     /**
