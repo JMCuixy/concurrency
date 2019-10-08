@@ -17,7 +17,6 @@ public class SafeCount {
     public static void main(String[] args) {
         final SafeCount cas = new SafeCount();
         List<Thread> ts = new ArrayList<>(600);
-        long start = System.currentTimeMillis();
         for (int j = 0; j < 100; j++) {
             Thread t = new Thread(() -> {
                 for (int i = 0; i < 10000; i++) {
@@ -40,7 +39,6 @@ public class SafeCount {
         }
         System.out.println(cas.i);
         System.out.println(cas.atomicI.get());
-        System.out.println(System.currentTimeMillis() - start);
     }
 
     /**
