@@ -87,6 +87,12 @@
             <classifier>jdk8</classifier>
         </dependency>
 
+        <dependency>
+            <groupId>co.paralleluniverse</groupId>
+            <artifactId>comsat-httpclient</artifactId>
+            <version>0.7.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>
