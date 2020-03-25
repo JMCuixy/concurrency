@@ -63,6 +63,8 @@
             <artifactId>reactor-test</artifactId>
             <version>3.2.10.RELEASE</version>
         </dependency>
+
+        <!-- jctools -->
         <dependency>
             <groupId>org.jctools</groupId>
             <artifactId>jctools-core</artifactId>
@@ -77,6 +79,14 @@
             <systemPath>${java.home}/../lib/tools.jar</systemPath>
         </dependency>
 
+        <!--协程-->
+        <dependency>
+            <groupId>co.paralleluniverse</groupId>
+            <artifactId>quasar-core</artifactId>
+            <version>0.7.4</version>
+            <classifier>jdk8</classifier>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -85,21 +95,34 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+
+            <!--协程配置-->
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>getClasspathFilenames</id>
+                        <goals>
+                            <goal>properties</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
+                <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                    <archive>
-                        <manifestEntries>
-                            <Premain-Class>org.agent.AgentTest</Premain-Class>
-                            <Agent-Class>org.agent.AgentTest</Agent-Class>
-                            <Can-Redefine-Classes>true</Can-Redefine-Classes>
-                            <Can-Retransform-Classes>true</Can-Retransform-Classes>
-                        </manifestEntries>
-                    </archive>
+                    <!-- Turn off before production -->
+                    <argLine>-Dco.paralleluniverse.fibers.verifyInstrumentation=true</argLine>
+
+                    <!-- Enable if using compile-time (AoT) instrumentation -->
+                    <!-- argLine>-Dco.paralleluniverse.fibers.disableAgentWarning</argLine -->
+
+                    <!-- Quasar Agent for JDK 7 -->
+                    <!-- argLine>-javaagent:${co.paralleluniverse:quasar-core:jar}</argLine-->
+
+                    <!-- Quasar Agent for JDK 8 -->
+                    <argLine>-javaagent:${co.paralleluniverse:quasar-core:jar:jdk8}</argLine>
                 </configuration>
             </plugin>
         </plugins>
