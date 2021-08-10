@@ -33,7 +33,7 @@ public class Aes {
         KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
         keyGenerator.init(128);
         SecretKey key = keyGenerator.generateKey();
-        // 支持创建指定长度的随机字符串
+        // 支持创建指定长度的随机字符串 https://blog.csdn.net/weixin_35127842/article/details/114969230
         Faker faker = new Faker(new Locale("zh-CN"));
         byte[] ivBytes = new byte[16];
         long start = System.currentTimeMillis();
