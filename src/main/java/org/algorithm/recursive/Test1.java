@@ -11,22 +11,21 @@ package org.algorithm.recursive;
 public class Test1 {
 
     public static void main(String[] args) {
-        String x = "x";
-        String y = "y";
-        String z = "z";
-        hanio(3, x, y, z);
+        String a = "A";
+        String b = "B";
+        String c = "C";
+        hanio(10, a, b, c);
     }
 
-    public static void hanio(int n, String x, String y, String z) {
+    public static void hanio(int n, String a, String b, String c) {
         if (n < 1) {
             System.out.println("汉诺塔的层数不能小于1");
         } else if (n == 1) {
-            System.out.println("移动: " + x + " -> " + z);
-            return;
+            System.out.println("移动: " + a + " -> " + c);
         } else {
-            hanio(n - 1, x, z, y);
-            System.out.println("移动: " + x + " -> " + z);
-            hanio(n - 1, y, x, z);
+            hanio(n - 1, a, c, b);
+            System.out.println("移动: " + a + " -> " + c);
+            hanio(n - 1, b, a, c);
         }
     }
 }
