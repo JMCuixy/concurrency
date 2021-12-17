@@ -10,12 +10,13 @@ import lombok.Data;
 @Data
 public class Node {
 
-    public Integer value;
+    public Object value;
 
     public Node next;
 
-    public Node(Integer value) {
+    public Node(Object value) {
         this.value = value;
+        next = null;
     }
 
     @Override
